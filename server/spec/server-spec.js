@@ -9,6 +9,7 @@ describe('Persistent Node Chat Server', function() {
   var dbConnection;
 
   beforeEach(function(done) {
+    console.log('within the beforeEach function');
     dbConnection = mysql.createConnection({
       user: 'root',
       password: '',
@@ -51,9 +52,11 @@ describe('Persistent Node Chat Server', function() {
         // your message table, since this is schema-dependent.
         var queryString = 'SELECT * FROM messages';
         var queryArgs = [];
+        console.log('within the server-spec.js', queryString);
 
         dbConnection.query(queryString, queryArgs, function(err, results) {
           // Should have one result:
+          console.log('right before the expect')
           expect(results.length).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.
@@ -80,8 +83,8 @@ describe('Persistent Node Chat Server', function() {
       // the message we just inserted:
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messageLog = JSON.parse(body);
-        expect(messageLog[0].text).to.equal('Men like you can never change!');
-        expect(messageLog[0].roomname).to.equal('main');
+        expect(messageLog[0].text_message).to.equal('Men like you can never change!');
+        expect(messageLog[0].room_name).to.equal('main');
         done();
       });
     });
