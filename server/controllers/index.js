@@ -40,7 +40,7 @@ module.exports = {
           console.log('error ', err);
         } else {
           res.setHeader('content-type', 'text/plain');
-          res.send();
+          res.send([rows[0]]);
         }
       })
     },
