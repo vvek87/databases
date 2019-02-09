@@ -71,7 +71,8 @@ describe('Persistent Node Chat Server', function() {
   it('Should output all messages from the DB', function(done) {
     // Let's insert a message into the db
        var message = 'Men like you can never change!';
-       var queryString = 'INSERT INTO messages (text_message) VALUES ('+JSON.stringify(message)+')';
+       var room = 'main';
+       var queryString = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message) +', '+ JSON.stringify(room) +')';
        var queryArgs = [];
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
@@ -86,7 +87,7 @@ describe('Persistent Node Chat Server', function() {
         var messageLog = JSON.parse(body);
         console.log('message log in spec', messageLog);
         expect(messageLog[0].text_message).to.equal('Men like you can never change!');
-        // expect(messageLog[0].room_name).to.equal('main');
+        expect(messageLog[0].room).to.equal('main');
         done();
       });
     });

@@ -17,7 +17,7 @@ module.exports = {
       })
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      // console.log('req.body in messages post ------------------------------', req.body);
+      console.log('req.body in messages post ------------------------------', req.body);
       models.messages.post(req.body, (err, req) => {
         // console.log('hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
         // console.log('req.body within models.messages.post --------', req.body);

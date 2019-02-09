@@ -21,7 +21,13 @@ module.exports = {
     post: function (message, callback) {
       console.log('message in messages post---------dsfdsfdsfdsfds', message)
       // console.log('callback in messages post---------', callback)
-      db.dbConnection.query('INSERT INTO messages (text_message) VALUES ('+JSON.stringify(message.message)+')', function (err, rows, fields) {
+      // var query = 'BEGIN;INSERT INTO messages (text_messages)VALUES('+JSON.stringify(message.message)+');INSERT INTO users (user_name) VALUES('+JSON.stringify(message.user)+');INSERT INTO rooms (room_name) VALUES('+JSON.stringify(message.room)+')COMMIT';
+      // var query = 'INSERT INTO messages (text_message, room) VALUES('+JSON.stringify(message.message)+'); INSERT INTO users (user_name) VALUES('+JSON.stringify(message.user)+'); INSERT INTO rooms (room_name) VALUES('+JSON.stringify(message.room)+');';
+
+      var oldQuery = 'INSERT INTO messages (text_message, roomname) VALUES ('+JSON.stringify(message.message)+', '+JSON.stringify(message.room)+' )';
+      var query = 'INSERT INTO messages (text_message) VALUES ('+JSON.stringify(message.message)+')';
+
+      db.dbConnection.query(query, function (err, rows, fields) {
         if (err) {
           console.log('Error while performing Query.', err);
           callback(err, null);
