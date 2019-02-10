@@ -2,7 +2,14 @@ var mysql = require('mysql');
 var Sequelize = require('sequelize');
 
 var db = new Sequelize('chat', 'root', '', {
-  dialect: 'mysql'
+  dialect: 'mysql',
+  pool: {
+    max: 20,
+    min: 0,                 // increased max and acquire and added maxIdleTime
+    acquire: 100000,
+    idle: 10000,
+    maxIdleTime: 10000
+  }
 });
 
   db

@@ -12,25 +12,30 @@ module.exports = {
           // console.log('data in modelssssss-------------------------', data);
           // console.log('data[0]--------------------------', data[0].dataValues);
           callback(null, data[0]);
+          // db.dbConnection.close();
         })
-        .then(function(err) {
-          callback(err);
+        .catch(function(err) {
+          callback(err, null);
+          db.dbConnection.close();
         })
     }, // a function which produces all the messages
-    post: function (message, room, callback) {
-      db.Message.sync()
-        .then(function() {
-          console.log('message in post----------------', message);
-          console.log('room in post------------', room);
-          return db.Message.create({text_message: message , room: room});
-        })
-        .then(function(data) {
-          console.log('data in messages post models ----------', data);
-          callback(null, data);
-        })
-        .then(function(err) {
-          callback(err);
-        })
+    post: function () {
+      // console.log('helloooooooo from post');
+      // db.Message.sync()
+      //   .then(function() {
+      //     console.log('message in post----------------', message);
+      //     console.log('room in post------------', room);
+      //     return db.Message.create({text_message: message , room: room});
+      //   })
+      //   .then(function(data) {
+      //     console.log('data in messages post models ----------', data);
+      //     callback(null, data);
+      //     // db.dbConnection.close();
+      //   })
+      //   .catch(function(err) {
+      //     callback(err, null);
+      //     db.dbConnection.close();
+      //   })
     } // a function which can be used to insert a message into the database
   },
 
@@ -45,12 +50,30 @@ module.exports = {
           // console.log('data in modelssssss-------------------------', data);
           // console.log('data[0]--------------------------', data[0].dataValues);
           callback(null, data);
+          // db.dbConnection.close();
         })
-        .then(function(err) {
-          callback(err);
+        .catch(function(err) {
+          callback(err, null);
+          db.dbConnection.close();
         })
     },
-    post: function () {}
+    post: function () {
+    //   db.User.sync()
+    //   .then(function() {
+    //     console.log('message in post----------------', message);
+    //     console.log('room in post------------', room);
+    //     return db.User.create({user_name: user});
+    //   })
+    //   .then(function(data) {
+    //     console.log('data in messages post models ----------', data);
+    //     callback(null, data);
+    //     // db.dbConnection.close();
+    //   })
+    //   .catch(function(err) {
+    //     callback(err, null);
+    //     db.dbConnection.close();
+    //   })
+    }
   }
 };
 

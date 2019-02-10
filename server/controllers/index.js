@@ -52,7 +52,7 @@ module.exports = {
         if (err) {
           console.log('error ', err);
         } else {
-          res.setHeader('content-type', 'application/json');
+          // res.setHeader('content-type', 'application/json');
           res.send({'rows': req.body}); //send 200 request
         }
       })
