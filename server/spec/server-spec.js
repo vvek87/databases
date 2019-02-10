@@ -13,7 +13,7 @@ describe('Persistent Node Chat Server', function() {
     dbConnection = mysql.createConnection({
       user: 'root',
       password: '',
-      database: 'chatter'
+      database: 'chat'
     });
     dbConnection.connect();
 
@@ -68,7 +68,7 @@ describe('Persistent Node Chat Server', function() {
     });
   });
 
-  it('Should output a messages from the DB', function(done) {
+  it('Should output a message from the DB', function(done) {
     // Let's insert a message into the db
        var message = 'Men like you can never change!';
        var room = 'main';
@@ -86,8 +86,8 @@ describe('Persistent Node Chat Server', function() {
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messageLog = JSON.parse(body);
         console.log('message log in spec', messageLog);
-        expect(messageLog[0].text_message).to.equal('Men like you can never change!');
-        expect(messageLog[0].room).to.equal('main');
+        expect(messageLog.text_message).to.equal('Men like you can never change!');
+        expect(messageLog.room).to.equal('main');
         done();
       });
     });
@@ -117,7 +117,7 @@ describe('Persistent Node Chat Server', function() {
       request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
         var messageLog = JSON.parse(body);
         console.log('message log in spec', messageLog);
-        expect(messageLog[0].room).to.equal('lobby');
+        expect(messageLog.room).to.equal('lobby');
         done();
       });
     });
@@ -146,7 +146,7 @@ describe('Persistent Node Chat Server', function() {
       // the message we just inserted:
       request('http://127.0.0.1:3000/classes/users', function(error, response, body) {
         var messageLog = JSON.parse(body);
-        console.log('message log in spec', messageLog);
+        console.log('message log[0] in spec', messageLog[0]);
         expect(messageLog[0].user_name).to.equal('Valjean');
         done();
       });

@@ -17,12 +17,32 @@ var db = new Sequelize('chat', 'root', '', {
 
   const Message = db.define('message', {
     text_message: Sequelize.STRING,
-    room: Sequelize.STRING
-  })
+    room: Sequelize.STRING, 
+  }, {
+      timestamps: false
+    });
+  
 
   const User = db.define('user', {
     user_name: Sequelize.STRING
-  })
+  }, {
+    timestamps: false
+  });
+
+  // Message.sync()
+  // .then(function() {
+  //   // Now instantiate an object and save it:
+  //   return Message.find()
+  // })
+  // .then(function(message) {
+  //     console.log(message.text_message + ' exists');
+  //   db.close();
+  // })
+  // .catch(function(err) {
+  //   // Handle any error in the chain
+  //   console.error(err);
+  //   db.close();
+  // });
 
 
   console.log('dsfsdfdsfdsfdsfds', Message);
@@ -59,5 +79,7 @@ var db = new Sequelize('chat', 'root', '', {
 
 
 module.exports = {
-  dbConnection: db
+  dbConnection: db,
+  Message: Message,
+  User: User
 };
