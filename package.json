@@ -24,7 +24,7 @@
     "mysql": "^2.16.0",
     "postman": "^0.2.0",
     "request": "^2.88.0",
-    "sequelize": "^3.21.0",
+    "sequelize": "^3.34.0",
     "underscore": "^1.9.1"
   },
   "devDependencies": {

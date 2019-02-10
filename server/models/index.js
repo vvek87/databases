@@ -20,10 +20,6 @@ module.exports = {
     }, // a function which produces all the messages
     post: function (message, callback) {
       console.log('message in messages post---------dsfdsfdsfdsfds', message)
-      // console.log('callback in messages post---------', callback)
-      // var query = 'BEGIN;INSERT INTO messages (text_messages)VALUES('+JSON.stringify(message.message)+');INSERT INTO users (user_name) VALUES('+JSON.stringify(message.user)+');INSERT INTO rooms (room_name) VALUES('+JSON.stringify(message.room)+')COMMIT';
-      // var query = 'INSERT INTO messages (text_message, room) VALUES('+JSON.stringify(message.message)+'); INSERT INTO users (user_name) VALUES('+JSON.stringify(message.user)+'); INSERT INTO rooms (room_name) VALUES('+JSON.stringify(message.room)+');';
-
       var oldQuery = 'INSERT INTO messages (text_message, roomname) VALUES ('+JSON.stringify(message.message)+', '+JSON.stringify(message.room)+' )';
       var query = 'INSERT INTO messages (text_message) VALUES ('+JSON.stringify(message.message)+')';
 
@@ -49,7 +45,7 @@ module.exports = {
           console.log('Error while performing Query.', err);
           callback(err, null);
         } else {
-          console.log('rows and fields from get', rows);
+          // console.log('rows and fields from get', rows);
           callback(null, rows);
         }
       });
