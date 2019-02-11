@@ -5,30 +5,29 @@ var mysql = require('mysql');
 var request = require('request'); // You might need to npm install the request module!
 var expect = require('chai').expect;
 
-describe('Persistent Node Chat Server', function() {
+describe('Persistent Node Chat Server', function () {
   var dbConnection;
 
-  beforeEach(function(done) {
-    console.log('within the beforeEach function');
+  beforeEach(function (done) {
     dbConnection = mysql.createConnection({
       user: 'root',
-      password: '',
+      password: 'koolpool',
       database: 'chat'
     });
     dbConnection.connect();
 
-       var tablename = "messages"; // TODO: fill this out
+    var tablename = "messages"; // TODO: fill this out
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
     dbConnection.query('truncate ' + tablename, done);
   });
 
-  afterEach(function() {
+  afterEach(function () {
     dbConnection.end();
   });
 
-  it('Should insert posted messages to the DB', function(done) {
+  it('Should insert posted messages to the DB', function (done) {
     // Post the user to the chat server.
     request({
       method: 'POST',
@@ -52,108 +51,95 @@ describe('Persistent Node Chat Server', function() {
         // your message table, since this is schema-dependent.
         var queryString = 'SELECT * FROM messages';
         var queryArgs = [];
-        console.log('within the server-spec.js', queryString);
 
-        dbConnection.query(queryString, queryArgs, function(err, results) {
+        dbConnection.query(queryString, queryArgs, function (err, results) {
           // Should have one result:
-          console.log('right before the expect')
           expect(results.length).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.
           expect(results[0].text_message).to.equal('In mercy\'s name, three days is all I need.');
-
           done();
         });
       });
     });
   });
 
-  it('Should output a message from the DB', function(done) {
-    // Let's insert a message into the db
-       var message = 'Men like you can never change!';
-       var room = 'main';
-       var queryString = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message) +', '+ JSON.stringify(room) +')';
-       var queryArgs = [];
-    // TODO - The exact query string and query args to use
-    // here depend on the schema you design, so I'll leave
-    // them up to you. */
+  it('Should output a message from the DB', function (done) {
+    var message = 'Men like you can never change!';
+    var room = 'main';
+    var queryString = 'INSERT INTO messages (text_message, room) VALUES (' + JSON.stringify(message) + ', ' + JSON.stringify(room) + ')';
+    var queryArgs = [];
 
-    dbConnection.query(queryString, queryArgs, function(err) {
+    dbConnection.query(queryString, queryArgs, function (err) {
       if (err) { throw err; }
-
-      // Now query the Node chat server and see if it returns
-      // the message we just inserted:
-      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+      request('http://127.0.0.1:3000/classes/messages', function (error, response, body) {
         var messageLog = JSON.parse(body);
-        console.log('message log in spec', messageLog);
-        expect(messageLog.text_message).to.equal('Men like you can never change!');
-        expect(messageLog.room).to.equal('main');
+        expect(messageLog.results[0].text_message).to.equal('Men like you can never change!');
+        expect(messageLog.results[0].room).to.equal('main');
         done();
       });
     });
   });
 
-  it('Should output correct room name', function(done) {
-    // Let's insert a message into the db
-       var message = 'hello!';
-       var room = 'lobby';
-      //  var queryString = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message) +', '+ JSON.stringify(room) +'), ('+ JSON.stringify(message2) +', '+ JSON.stringify(room) +') ';
-      var query = "INSERT INTO messages (text_message, room) VALUES ('hello', 'lobby'), ('hello again!','lobby')";
-      //  var message2 = 'hello to you, too!';
-      //  var room = 'lobby';
-      //  var queryString2 = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message2) +', '+ JSON.stringify(room) +')';
-       var queryArgs = [];
+  it('Should output correct room name', function (done) {
+    var query = "INSERT INTO messages (text_message, room) VALUES ('hello', 'lobby'), ('hello again!','lobby')";
 
-      //  var combinedQuery = queryString + ' ; ' + queryString2;
-    // TODO - The exact query string and query args to use
-    // here depend on the schema you design, so I'll leave
-    // them up to you. */
+    var queryArgs = [];
 
-    dbConnection.query(query, queryArgs, function(err) {
+    dbConnection.query(query, queryArgs, function (err) {
       if (err) { throw err; }
-
-      // Now query the Node chat server and see if it returns
-      // the message we just inserted:
-      request('http://127.0.0.1:3000/classes/messages', function(error, response, body) {
+      request('http://127.0.0.1:3000/classes/messages', function (error, response, body) {
         var messageLog = JSON.parse(body);
-        console.log('message log in spec', messageLog);
-        expect(messageLog.room).to.equal('lobby');
+        expect(messageLog.results[0].room).to.equal('lobby');
         done();
       });
     });
   });
 
+  it('Should output correct user name', function (done) {
 
-  it('Should output correct user name', function(done) {
-    // Let's insert a message into the db
+    var query = "INSERT INTO users (user_name) VALUES ('Aarushi')";
+    var queryArgs = [];
 
-      //  var queryString = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message) +', '+ JSON.stringify(room) +'), ('+ JSON.stringify(message2) +', '+ JSON.stringify(room) +') ';
-      var query = "INSERT INTO users (user_name) VALUES ('Aarushi')";
-      //  var message2 = 'hello to you, too!';
-      //  var room = 'lobby';
-      //  var queryString2 = 'INSERT INTO messages (text_message, room) VALUES ('+ JSON.stringify(message2) +', '+ JSON.stringify(room) +')';
-       var queryArgs = [];
-
-      //  var combinedQuery = queryString + ' ; ' + queryString2;
-    // TODO - The exact query string and query args to use
-    // here depend on the schema you design, so I'll leave
-    // them up to you. */
-
-    dbConnection.query(query, queryArgs, function(err) {
+    dbConnection.query(query, queryArgs, function (err) {
       if (err) { throw err; }
 
       // Now query the Node chat server and see if it returns
       // the message we just inserted:
-      request('http://127.0.0.1:3000/classes/users', function(error, response, body) {
+      request('http://127.0.0.1:3000/classes/users', function (error, response, body) {
         var messageLog = JSON.parse(body);
-        console.log('message log[0] in spec', messageLog[0]);
-        expect(messageLog[0].user_name).to.equal('Valjean');
+        expect(messageLog.results[1].user_name).to.equal('Aarushi');
         done();
       });
     });
   });
 
+  it('Should post multiple messages', function (done) {
 
+    var query = "INSERT INTO messages (text_message, room) VALUES ('hello', 'lobby'), ('hello again!','lobby'), ('goodbye!','main')";
 
+    var queryArgs = [];
+
+    dbConnection.query(query, queryArgs, function (err) {
+      if (err) { throw err; }
+
+      request('http://127.0.0.1:3000/classes/messages', function (error, response, body) {
+        var messageLog = JSON.parse(body);
+        expect(messageLog.results.length).to.equal(3);
+        done();
+      });
+    });
+  });
+
+  it('Should send back posted data', function (done) {
+    request({
+      method: 'POST',
+      uri: 'http://127.0.0.1:3000/classes/users',
+      json: { username: 'Valjean' }
+    }, function (error, response, body) {
+      expect(body.rows.user_name).to.equal('Valjean');
+      done();
+    });
+  });
 
 });

@@ -24,6 +24,8 @@ app.use('/classes', router);
 
 // Serve the client files
 app.use(express.static(__dirname + '/../client'));
+app.use('/scripts', express.static(__dirname + '/../node_modules/underscore/'));
+app.use('/scripts', express.static(__dirname + '/../node_modules/jquery/dist/'));
 
 // If we are being run directly, run the server.
 if (!module.parent) {

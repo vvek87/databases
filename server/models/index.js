@@ -1,41 +1,34 @@
 var db = require('../db');
 
-
 module.exports = {
   messages: {
     get: function (callback) {
       db.Message.sync()
-        .then(function() {
+        .then(function () {
           return db.Message.findAll();
         })
-        .then(function(data) {
-          // console.log('data in modelssssss-------------------------', data);
-          // console.log('data[0]--------------------------', data[0].dataValues);
-          callback(null, data[0]);
-          // db.dbConnection.close();
+        .then(function (data) {
+          callback(null, { results: data });
         })
-        .catch(function(err) {
+        .catch(function (err) {
           callback(err, null);
           db.dbConnection.close();
-        })
+        });
     }, // a function which produces all the messages
-    post: function () {
-      // console.log('helloooooooo from post');
-      // db.Message.sync()
-      //   .then(function() {
-      //     console.log('message in post----------------', message);
-      //     console.log('room in post------------', room);
-      //     return db.Message.create({text_message: message , room: room});
-      //   })
-      //   .then(function(data) {
-      //     console.log('data in messages post models ----------', data);
-      //     callback(null, data);
-      //     // db.dbConnection.close();
-      //   })
-      //   .catch(function(err) {
-      //     callback(err, null);
-      //     db.dbConnection.close();
-      //   })
+    post: function (postData, callback) {
+      let message = postData.message;
+      let room = postData.roomname;
+      db.Message.sync()
+        .then(function () {
+          return db.Message.create({ 'text_message': message, 'room': room });
+        })
+        .then(function (data) {
+          callback(null, data.dataValues);
+        })
+        .catch(function (err) {
+          callback(err, null);
+          db.dbConnection.close();
+        });
     } // a function which can be used to insert a message into the database
   },
 
@@ -43,36 +36,30 @@ module.exports = {
     // Ditto as above.
     get: function (callback) {
       db.User.sync()
-        .then(function() {
+        .then(function () {
           return db.User.findAll();
         })
-        .then(function(data) {
-          // console.log('data in modelssssss-------------------------', data);
-          // console.log('data[0]--------------------------', data[0].dataValues);
-          callback(null, data);
-          // db.dbConnection.close();
+        .then(function (data) {
+          callback(null, { results: data });
         })
-        .catch(function(err) {
+        .catch(function (err) {
           callback(err, null);
           db.dbConnection.close();
-        })
+        });
     },
-    post: function () {
-    //   db.User.sync()
-    //   .then(function() {
-    //     console.log('message in post----------------', message);
-    //     console.log('room in post------------', room);
-    //     return db.User.create({user_name: user});
-    //   })
-    //   .then(function(data) {
-    //     console.log('data in messages post models ----------', data);
-    //     callback(null, data);
-    //     // db.dbConnection.close();
-    //   })
-    //   .catch(function(err) {
-    //     callback(err, null);
-    //     db.dbConnection.close();
-    //   })
+    post: function (data, callback) {
+      let user = data.username;
+      db.User.sync()
+        .then(function () {
+          return db.User.create({ 'user_name': user });
+        })
+        .then(function (data) {
+          callback(null, data.dataValues);
+        })
+        .catch(function (err) {
+          callback(err, null);
+          db.dbConnection.close();
+        });
     }
   }
 };
