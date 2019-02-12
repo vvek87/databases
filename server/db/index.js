@@ -1,6 +1,6 @@
 var Sequelize = require('sequelize');
 
-var db = new Sequelize('chat', 'root', 'koolpool', {
+var db = new Sequelize('chat', 'root', 'test', {
   dialect: 'mysql',
   // pool: {
   //   max: 20,
