@@ -11,7 +11,7 @@ module.exports = {
           res.send(data);
         }
       });
-    }, // a function which handles a get request for all messages
+    },
     post: function (req, res) {
       models.messages.post(req.body, (err, req) => {
         if (err) {
@@ -20,7 +20,7 @@ module.exports = {
           res.send({'rows': req.body}); //send 200 request
         }
       });
-    } // a function which handles posting a message to the database
+    }
   },
 
   users: {
@@ -39,7 +39,7 @@ module.exports = {
         if (err) {
           console.log('error ', err);
         } else {
-          res.send({'rows': rows}); //req.body
+          res.send({'rows': rows});
         }
       });
     }
